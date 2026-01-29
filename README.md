@@ -23,17 +23,3 @@
 DebugViewまたはリアルタイムで以下を確認：
 - experience_impressionイベント
 - exp_variant_stringパラメータでパターンを識別
-
-### BigQueryでの分析
-```sql
-SELECT
-  event_params.value.string_value as variant_id,
-  COUNTIF(event_name = 'purchase') / COUNTIF(event_name = 'experience_impression') as cvr
-FROM
-  `your-project.analytics_XXX.events_*`
-CROSS JOIN UNNEST(event_params) as event_params
-WHERE
-  event_params.key = 'exp_variant_string'
-  AND event_name IN ('experience_impression', 'purchase')
-GROUP BY
-  variant_id
